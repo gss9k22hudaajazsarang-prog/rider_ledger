@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10243a">
+<title>Rider Ledger — Earnings & Expenses</title>
+<style>
+:root{--navy:#10243a;--teal:#087f8c;--mint:#e7f6f4;--bg:#f4f7fa;--ink:#172b3d;--muted:#68798a;--line:#e1e8ef;--white:#fff;--red:#c2413b;--green:#16794b;--shadow:0 8px 28px rgba(20,43,61,.06)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:var(--navy);color:white;padding:20px max(18px,calc((100% - 1180px)/2));display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:42px;height:42px;border-radius:13px;background:#14a3a5;display:grid;place-items:center;font-size:22px}.brand h1{font-size:20px;margin:0}.brand p{margin:2px 0 0;color:#c6d5e2;font-size:12px}
+header button{background:#fff;color:var(--navy)}
+main{max-width:1180px;margin:24px auto;padding:0 16px 40px}.topline{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}.topline h2{margin:0;font-size:23px}.topline p{margin:3px 0 0;color:var(--muted)}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}.tab{border:1px solid var(--line);background:#fff;color:var(--muted);padding:10px 14px;border-radius:12px;font-weight:650}.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+button{border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:650;cursor:pointer;background:var(--teal);color:white}button.secondary{background:#edf2f6;color:var(--ink)}button.danger{background:#fff0ef;color:var(--red)}button.small{font-size:12px;padding:6px 9px}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}.card,.panel{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:var(--shadow)}.metric-label{font-size:12px;color:var(--muted);font-weight:650}.metric{font-size:25px;font-weight:800;margin-top:6px;letter-spacing:-.4px}.metric-sub{font-size:12px;color:var(--muted);margin-top:4px}.positive{color:var(--green)}.negative{color:var(--red)}
+.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:16px}.panel h3{margin:0 0 14px;font-size:17px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+form .fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:flex;flex-direction:column;gap:5px}.field.full{grid-column:1/-1}label{font-size:12px;color:var(--muted);font-weight:700}input,select,textarea{width:100%;padding:11px 12px;border:1px solid #d5dee7;border-radius:10px;font:inherit;color:var(--ink);background:white;min-width:0}input:focus,select:focus,textarea:focus{outline:2px solid #a7e0df;border-color:var(--teal)}.hint{font-size:11px;color:var(--muted)}.form-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.pill{display:inline-block;padding:4px 8px;border-radius:99px;background:var(--mint);color:#087078;font-size:11px;font-weight:750}
+.fuelbox{grid-column:1/-1;background:#f3faf9;border:1px solid #cfeae7;border-radius:12px;padding:12px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.fuelbox .field{gap:4px}.fuelvalue{font-weight:800;color:#087078;font-size:14px}
+.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px;white-space:nowrap}th,td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;background:#f8fafc;position:sticky;top:0}td.num{text-align:right;font-variant-numeric:tabular-nums}.empty{text-align:center;color:var(--muted);padding:30px 12px}.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin:12px 0}.filters .field{min-width:140px;flex:1}.reportgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.reportitem{border:1px solid var(--line);border-radius:12px;padding:14px}.reportitem .metric{font-size:20px}.barrow{display:grid;grid-template-columns:100px 1fr 90px;gap:10px;align-items:center;margin:12px 0;font-size:12px}.bar{height:9px;background:#e9eef3;border-radius:99px;overflow:hidden}.bar span{display:block;height:100%;background:var(--teal);border-radius:99px}.notice{font-size:12px;color:var(--muted);background:#f8fafc;border-radius:10px;padding:11px;margin-top:14px}.hidden{display:none!important}.right{margin-left:auto}.footer{text-align:center;color:var(--muted);font-size:11px;margin:22px 0 0}
+@media(max-width:850px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:1fr}.reportgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){main{margin:16px auto;padding:0 10px 28px}.cards{gap:8px}.card{padding:13px}.metric{font-size:21px}.panel{padding:13px}.form fields{display:block}form .fields{grid-template-columns:1fr}.fuelbox{grid-template-columns:1fr}.reportgrid{grid-template-columns:1fr}.topline h2{font-size:20px}header{padding:15px}.brand h1{font-size:18px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><div class="logo">₹</div><div><h1>Rider Ledger</h1><p>Your daily earnings, fuel & expenses</p></div></div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="secondary" id="exportCsv" style="background:#e7eef5">Export CSV</button><button id="backupBtn">Backup data</button></div>
+</header>
+<main>
+ <div class="topline"><div><h2 id="pageTitle">Dashboard</h2><p id="todayLine"></p></div><span class="pill">Amounts in Indian Rupees (₹)</span></div>
+ <nav>
+  <button class="tab active" data-page="dashboard">Dashboard</button><button class="tab" data-page="daily">Daily Log</button><button class="tab" data-page="reports">Reports</button><button class="tab" data-page="settings">Backup & Settings</button>
+ </nav>
+ <section id="dashboard">
+  <div class="cards">
+   <div class="card"><div class="metric-label">Total earnings</div><div class="metric" id="mEarnings">₹0.00</div><div class="metric-sub">Selected month</div></div>
+   <div class="card"><div class="metric-label">Petrol expenses</div><div class="metric" id="mFuel">₹0.00</div><div class="metric-sub" id="mFuelQty">0.000 L · 0 ml</div></div>
+   <div class="card"><div class="metric-label">Other expenses</div><div class="metric" id="mOther">₹0.00</div><div class="metric-sub">Food, parking, repairs…</div></div>
+   <div class="card"><div class="metric-label">Net earnings</div><div class="metric positive" id="mNet">₹0.00</div><div class="metric-sub">Earnings − all expenses</div></div>
+  </div>
+  <div class="layout">
+   <div class="panel">
+    <div class="panel-head"><h3 id="formTitle">Add daily entry</h3><span class="pill">Fast entry</span></div>
+    <form id="entryForm">
+     <input type="hidden" id="editId">
+     <div class="fields">
+      <div class="field"><label for="date">Date</label><input id="date" type="date" required></div>
+      <div class="field"><label for="earnings">Total earnings (₹)</label><input id="earnings" type="number" min="0" step=".01" placeholder="e.g. 1800" required></div>
+      <div class="field"><label for="cash">Cash received (₹)</label><input id="cash" type="number" min="0" step=".01" value="0"></div>
+      <div class="field"><label for="online">Online / UPI received (₹)</label><input id="online" type="number" min="0" step=".01" value="0"></div>
+      <div class="field"><label for="incentives">Incentives / tips (₹)</label><input id="incentives" type="number" min="0" step=".01" value="0"></div>
+      <div class="field"><label for="km">Kilometres travelled (km)</label><input id="km" type="number" min="0" step=".1" placeholder="optional"></div>
+      <div class="fuelbox">
+       <div class="field"><label for="fuelLitres">Petrol litres (L)</label><input id="fuelLitres" type="number" min="0" step=".001" placeholder="e.g. 1.5"></div>
+       <div class="field"><label for="fuelMl">Extra millilitres (ml)</label><input id="fuelMl" type="number" min="0" max="999" step="1" value="0"></div>
+       <div class="field"><label for="fuelPrice">Price per litre (₹)</label><input id="fuelPrice" type="number" min="0" step=".01" placeholder="e.g. 106"></div>
+       <div class="field"><label>Petrol quantity total</label><div class="fuelvalue" id="fuelQtyPreview">0.000 L · 0 ml</div></div>
+       <div class="field"><label>Calculated petrol cost</label><div class="fuelvalue" id="fuelCostPreview">₹0.00</div></div>
+       <div class="field"><label>Fuel efficiency</label><div class="fuelvalue" id="effPreview">— km/L</div></div>
+      </div>
+      <div class="field"><label for="other">Other expenses total (₹)</label><input id="other" type="number" min="0" step=".01" value="0" required></div>
+      <div class="field"><label for="otherCategory">Main other expense category</label><select id="otherCategory"><option>Food / water</option><option>Parking / toll</option><option>Maintenance / repair</option><option>Mobile / data</option><option>Vehicle rent / EMI</option><option>Penalty / fine</option><option>Other</option><option>None</option></select></div>
+      <div class="field"><label for="startBalance">Starting balance for day (₹)</label><input id="startBalance" type="number" min="0" step=".01" value="0"></div>
+      <div class="field"><label for="notes">Notes</label><input id="notes" type="text" maxlength="200" placeholder="Platform, shift, anything to remember"></div>
+      <div class="field full"><div class="notice">Net earnings = total earnings − petrol cost − other expenses. Closing balance = starting balance + net earnings. Cash/UPI fields help split receipts; they are not added again to total earnings.</div></div>
+     </div>
+     <div class="form-actions"><button type="submit" id="saveBtn">Save entry</button><button type="button" class="secondary" id="resetBtn">Clear form</button></div>
+    </form>
+   </div>
+   <div class="panel">
+    <div class="panel-head"><h3>Recent entries</h3><button class="secondary small" data-goto="daily">View all</button></div>
+    <div id="recentTable" class="table-wrap"></div>
+    <div class="notice">Tip: enter the petrol quantity in litres plus any remaining millilitres. Example: 1 litre and 250 ml = 1.250 L. Export or back up your data regularly.</div>
+   </div>
+  </div>
+ </section>
+ <section id="daily" class="hidden">
+  <div class="panel">
+   <div class="panel-head"><h3>Daily log</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="secondary" id="dailyCsv">Export this view</button><button data-goto="dashboard">+ Add entry</button></div></div>
+   <div class="filters"><div class="field"><label>Month</label><input id="filterMonth" type="month"></div><div class="field"><label>Search notes / category</label><input id="filterSearch" placeholder="Search"></div><button class="secondary" id="clearFilters">Clear filters</button></div>
+   <div id="dailyTable" class="table-wrap"></div>
+  </div>
+ </section>
+ <section id="reports" class="hidden">
+  <div class="panel">
+   <div class="panel-head"><h3>Reports & trends</h3><div class="field" style="max-width:190px"><label>Report month</label><input id="reportMonth" type="month"></div></div>
+   <div class="reportgrid" id="reportCards"></div>
+   <h3 style="margin-top:22px">Expense breakdown</h3><div id="expenseBars"></div>
+   <h3 style="margin-top:22px">Daily summary</h3><div id="reportTable" class="table-wrap"></div>
+   <div class="notice">Monthly net is calculated from saved entries. This is a personal record, not a bank balance statement.</div>
+  </div>
+ </section>
+ <section id="settings" class="hidden">
+  <div class="layout">
+   <div class="panel"><h3>Backup & restore</h3><p style="color:var(--muted)">Your entries are saved in this browser on this device. Export backups before clearing browser data or changing devices.</p>
+    <div class="form-actions"><button id="backupBtn2">Download JSON backup</button><button class="secondary" id="restoreBtn">Restore JSON backup</button><input type="file" id="restoreFile" accept=".json,application/json" class="hidden"></div>
+    <div class="notice">This first version stores data locally in your browser and does not sync automatically across devices. Keep a backup file somewhere private.</div>
+   </div>
+   <div class="panel"><h3>Tracker settings</h3><div class="field"><label for="fuelDefault">Default petrol price per litre (₹)</label><input id="fuelDefault" type="number" min="0" step=".01" placeholder="Optional"></div><div class="form-actions"><button id="saveSettings">Save setting</button><button class="danger" id="clearAll">Delete all entries</button></div><p class="hint">The default price is used only to prefill future entries. You can change it each day.</p></div>
+  </div>
+ </section>
+ <div class="footer">Rider Ledger · Keep a backup of your records · Built for daily rider finance tracking</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const today=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const monthNow=()=>today().slice(0,7);
+const money=n=>'₹'+(Number(n)||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const num=id=>Math.max(0,Number($(id).value)||0);
+const weekday=date=>date?new Date(date+'T12:00:00').toLocaleDateString('en-IN',{weekday:'long'}):'';
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+let entries=[], settings={fuelDefault:''}, activePage='dashboard';
+try{entries=JSON.parse(localStorage.getItem('riderLedger.entries')||'[]');settings=Object.assign(settings,JSON.parse(localStorage.getItem('riderLedger.settings')||'{}'))}catch(e){entries=[]}
+const persist=()=>{localStorage.setItem('riderLedger.entries',JSON.stringify(entries));localStorage.setItem('riderLedger.settings',JSON.stringify(settings))};
+function fuelLitres(e){return (Number(e.fuelLitres)||0)+(Number(e.fuelMl)||0)/1000}
+function fuelCost(e){return fuelLitres(e)*(Number(e.fuelPrice)||0)}
+function otherCost(e){return Number(e.other)||0}
+function net(e){return (Number(e.earnings)||0)-fuelCost(e)-otherCost(e)}
+function closing(e){return (Number(e.startBalance)||0)+net(e)}
+function sorted(arr=entries){return [...arr].sort((a,b)=>b.date.localeCompare(a.date)||b.createdAt-a.createdAt)}
+function currentMonth(arr=entries,m=monthNow()){return arr.filter(e=>e.date&&e.date.slice(0,7)===m)}
+function setPage(page){activePage=page;document.querySelectorAll('section[id]').forEach(s=>s.classList.toggle('hidden',s.id!==page));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('pageTitle').textContent=({dashboard:'Dashboard',daily:'Daily Log',reports:'Reports',settings:'Backup & Settings'})[page];if(page==='daily')renderDaily();if(page==='reports')renderReports();window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setPage(b.dataset.page));document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>setPage(b.dataset.goto));
+function previewFuel(){const L=num('fuelLitres'),ml=Math.min(999,num('fuelMl')),total=L+ml/1000,price=num('fuelPrice'),km=num('km');$('fuelQtyPreview').textContent=total.toFixed(3)+' L · '+Math.round(total*1000).toLocaleString('en-IN')+' ml';$('fuelCostPreview').textContent=money(total*price);$('effPreview').textContent=total>0&&km>0?(km/total).toFixed(1)+' km/L':'— km/L'}
+['fuelLitres','fuelMl','fuelPrice','km'].forEach(id=>$(id).addEventListener('input',previewFuel));
+function rowHtml(e,i){const L=fuelLitres(e);return `<tr><td>${i+1}</td><td>${e.date}</td><td>${weekday(e.date)}</td><td class="num">${money(e.earnings)}</td><td class="num">${money(fuelCost(e))}<br><span class="hint">${L.toFixed(3)} L</span></td><td class="num">${money(e.other)}</td><td class="num ${net(e)<0?'negative':'positive'}">${money(net(e))}</td></tr>`}
+function renderDashboard(){let arr=currentMonth(),earn=arr.reduce((s,e)=>s+(+e.earnings||0),0),fuel=arr.reduce((s,e)=>s+fuelCost(e),0),other=arr.reduce((s,e)=>s+otherCost(e),0),litres=arr.reduce((s,e)=>s+fuelLitres(e),0),n=earn-fuel-other;$('mEarnings').textContent=money(earn);$('mFuel').textContent=money(fuel);$('mOther').textContent=money(other);$('mNet').textContent=money(n);$('mNet').className='metric '+(n<0?'negative':'positive');$('mFuelQty').textContent=litres.toFixed(3)+' L · '+Math.round(litres*1000).toLocaleString('en-IN')+' ml';let recent=sorted().slice(0,5);$('recentTable').innerHTML=recent.length?`<table><thead><tr><th>Date</th><th>Earnings</th><th>Petrol</th><th>Net</th></tr></thead><tbody>${recent.map(e=>`<tr><td>${e.date}</td><td class="num">${money(e.earnings)}</td><td class="num">${money(fuelCost(e))}</td><td class="num ${net(e)<0?'negative':'positive'}">${money(net(e))}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">No entries yet. Add your first daily entry.</div>'}
+function renderDaily(){const m=$('filterMonth').value,search=$('filterSearch').value.toLowerCase();let arr=sorted().filter(e=>(!m||e.date.startsWith(m))&&(!search||`${e.notes||''} ${e.otherCategory||''} ${e.date}`.toLowerCase().includes(search)));if(!arr.length){$('dailyTable').innerHTML='<div class="empty">No matching entries.</div>';return}
+$('dailyTable').innerHTML=`<table><thead><tr><th>Sr No.</th><th>Date / Day</th><th>Earnings</th><th>Petrol qty</th><th>Petrol cost</th><th>Other expenses</th><th>Net earnings</th><th>Closing balance</th><th>Notes</th><th>Actions</th></tr></thead><tbody>${arr.map((e,i)=>`<tr><td>${i+1}</td><td>${e.date}<br><span class="hint">${weekday(e.date)}</span></td><td class="num">${money(e.earnings)}</td><td class="num">${fuelLitres(e).toFixed(3)} L<br><span class="hint">${Math.round(fuelLitres(e)*1000)} ml</span></td><td class="num">${money(fuelCost(e))}</td><td class="num">${money(e.other)}</td><td class="num ${net(e)<0?'negative':'positive'}">${money(net(e))}</td><td class="num">${money(closing(e))}</td><td>${escapeHtml(e.notes||'—')}</td><td><button class="secondary small" onclick="editEntry('${e.id}')">Edit</button> <button class="danger small" onclick="deleteEntry('${e.id}')">Delete</button></td></tr>`).join('')}</tbody></table>`}
+function renderReports(){let m=$('reportMonth').value||monthNow(),arr=currentMonth(entries,m),earn=arr.reduce((s,e)=>s+(+e.earnings||0),0),fuel=arr.reduce((s,e)=>s+fuelCost(e),0),other=arr.reduce((s,e)=>s+otherCost(e),0),lit=arr.reduce((s,e)=>s+fuelLitres(e),0),kms=arr.reduce((s,e)=>s+(+e.km||0),0),n=earn-fuel-other;const cards=[['Total earnings',money(earn)],['Petrol expenses',money(fuel)],['Other expenses',money(other)],['Net earnings',money(n)],['Petrol used',lit.toFixed(3)+' L / '+Math.round(lit*1000)+' ml'],['Distance travelled',kms.toFixed(1)+' km']];$('reportCards').innerHTML=cards.map(c=>`<div class="reportitem"><div class="metric-label">${c[0]}</div><div class="metric">${c[1]}</div></div>`).join('');let cats={};arr.forEach(e=>{let k=e.otherCategory||'Other';cats[k]=(cats[k]||0)+otherCost(e)});let max=Math.max(1,...Object.values(cats));$('expenseBars').innerHTML=Object.entries(cats).filter(([k,v])=>v>0).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="barrow"><span>${escapeHtml(k)}</span><div class="bar"><span style="width:${v/max*100}%"></span></div><b style="text-align:right">${money(v)}</b></div>`).join('')||'<div class="empty">No expenses recorded for this month.</div>';let days=[...new Set(arr.map(e=>e.date))].sort();$('reportTable').innerHTML=days.length?`<table><thead><tr><th>Date</th><th>Day</th><th>Earnings</th><th>Petrol</th><th>Other</th><th>Net</th></tr></thead><tbody>${days.map(d=>{let es=arr.filter(e=>e.date===d),a=es.reduce((s,e)=>s+(+e.earnings||0),0),f=es.reduce((s,e)=>s+fuelCost(e),0),o=es.reduce((s,e)=>s+otherCost(e),0);return `<tr><td>${d}</td><td>${weekday(d)}</td><td class="num">${money(a)}</td><td class="num">${money(f)}</td><td class="num">${money(o)}</td><td class="num">${money(a-f-o)}</td></tr>`}).join('')}</tbody></table>`:'<div class="empty">No entries for this month yet.</div>'}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function resetForm(){ $('entryForm').reset();$('editId').value='';$('date').value=today();$('cash').value='0';$('online').value='0';$('incentives').value='0';$('other').value='0';$('startBalance').value='0';$('fuelMl').value='0';$('fuelPrice').value=settings.fuelDefault||'';$('formTitle').textContent='Add daily entry';$('saveBtn').textContent='Save entry';previewFuel()}
+$('entryForm').addEventListener('submit',ev=>{ev.preventDefault();const id=$('editId').value;const e={id:id||uid(),createdAt:Date.now(),date:$('date').value,earnings:num('earnings'),cash:num('cash'),online:num('online'),incentives:num('incentives'),km:num('km'),fuelLitres:num('fuelLitres'),fuelMl:Math.min(999,num('fuelMl')),fuelPrice:num('fuelPrice'),other:num('other'),otherCategory:$('otherCategory').value,startBalance:num('startBalance'),notes:$('notes').value.trim()};if(!e.date){alert('Please choose a date.');return}if(id){const idx=entries.findIndex(x=>x.id===id);if(idx>=0){e.createdAt=entries[idx].createdAt;entries[idx]=e}}else entries.push(e);persist();resetForm();renderAll();alert(id?'Entry updated.':'Daily entry saved.')});
+$('resetBtn').onclick=resetForm;
+window.editEntry=id=>{const e=entries.find(x=>x.id===id);if(!e)return;setPage('dashboard');$('editId').value=e.id;for(const k of ['date','earnings','cash','online','incentives','km','fuelLitres','fuelMl','fuelPrice','other','otherCategory','startBalance','notes'])$(k).value=e[k]??(k==='date'?today():'');$('formTitle').textContent='Edit daily entry';$('saveBtn').textContent='Update entry';previewFuel();window.scrollTo({top:0,behavior:'smooth'})};
+window.deleteEntry=id=>{if(confirm('Delete this entry? This cannot be undone unless you have a backup.')){entries=entries.filter(e=>e.id!==id);persist();renderAll()}};
+function csvEscape(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+function csvData(arr){const heads=['Sr No','Date','Day','Total Earnings Rs','Cash Received Rs','Online UPI Received Rs','Incentives Tips Rs','Petrol Litres','Petrol Millilitres','Petrol Total Litres','Petrol Price Per Litre Rs','Petrol Cost Rs','Other Expenses Rs','Other Expense Category','Total Expenses Rs','Net Earnings Rs','Starting Balance Rs','Closing Balance Rs','Kilometres','Fuel Efficiency km per L','Notes'];return [heads,...arr.map((e,i)=>[i+1,e.date,weekday(e.date),e.earnings,e.cash,e.online,e.incentives,e.fuelLitres,e.fuelMl,fuelLitres(e),e.fuelPrice,fuelCost(e),e.other,e.otherCategory,fuelCost(e)+otherCost(e),net(e),e.startBalance,closing(e),e.km,fuelLitres(e)>0&&e.km>0?(e.km/fuelLitres(e)).toFixed(2):'',e.notes])].map(r=>r.map(csvEscape).join(',')).join('\r\n')}
+function download(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function exportCSV(arr=sorted()){download('rider-ledger-'+today()+'.csv','\ufeff'+csvData(arr),'text/csv;charset=utf-8')}
+$('exportCsv').onclick=()=>exportCSV();$('dailyCsv').onclick=()=>{const m=$('filterMonth').value,s=$('filterSearch').value.toLowerCase();exportCSV(sorted().filter(e=>(!m||e.date.startsWith(m))&&(!s||`${e.notes||''} ${e.otherCategory||''} ${e.date}`.toLowerCase().includes(s))))};
+function backup(){download('rider-ledger-backup-'+today()+'.json',JSON.stringify({app:'Rider Ledger',version:1,exportedAt:new Date().toISOString(),settings,entries},null,2),'application/json')}
+$('backupBtn').onclick=backup;$('backupBtn2').onclick=backup;$('restoreBtn').onclick=()=>$('restoreFile').click();$('restoreFile').onchange=async ev=>{const f=ev.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!Array.isArray(data.entries))throw Error('Invalid backup');if(!confirm(`Restore ${data.entries.length} entries? This will replace current entries.`))return;entries=data.entries;settings=Object.assign({fuelDefault:''},data.settings||{});persist();$('fuelDefault').value=settings.fuelDefault||'';renderAll();alert('Backup restored.')}catch(e){alert('Could not restore this file. Please choose a Rider Ledger JSON backup.')}ev.target.value=''};
+$('saveSettings').onclick=()=>{settings.fuelDefault=$('fuelDefault').value;persist();resetForm();alert('Setting saved.')};
+$('clearAll').onclick=()=>{if(confirm('Delete ALL saved entries from this browser? Download a backup first if you need them.')){entries=[];persist();renderAll();resetForm()}};
+$('filterMonth').onchange=renderDaily;$('filterSearch').oninput=renderDaily;$('clearFilters').onclick=()=>{$('filterMonth').value='';$('filterSearch').value='';renderDaily()};$('reportMonth').onchange=renderReports;
+function renderAll(){renderDashboard();if(activePage==='daily')renderDaily();if(activePage==='reports')renderReports()}
+$('date').value=today();$('filterMonth').value=monthNow();$('reportMonth').value=monthNow();$('fuelDefault').value=settings.fuelDefault||'';$('todayLine').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});resetForm();renderAll();
+</script>
+</body>
+</html>
